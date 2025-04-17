@@ -10,3 +10,11 @@ python3
 >>> rm = visa.ResourceManager()
 >>> rm.list_resources()
 ```
+### Ubuntu
+```
+sudo apt-get install python3-pyusb python3-pyvisa
+pip3 install pyusb pyvisa pyvisa-py
+sudo mv 99-pm16.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
