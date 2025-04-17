@@ -1,9 +1,18 @@
 import pyvisa as visa
+from typing import Optional
 
 class PM16:
-    def __init__(self, address:str) -> None:
-        self.rm = visa.ResourceManager()
-        self.pm = self.rm.open_resource(address)
+    def __init__(self, address:Optional[str]=None) -> None:
+        if address is None:
+            # look for address that starts with "USB0"
+            self.rm = visa.ResourceManager()
+            resources = self.rm.list_resources()
+            usb_resources = [r for r in resources if r.startswith("USB0")]
+            if not usb_resources:
+                raise RuntimeError("No USB0 devices found")
+            self.pm = self.rm.open_resource(usb_resources[0])
+        else:
+            self.pm = address
         self.wavelength = 500
         self.averaging = 10
         self.set_unit("W")
